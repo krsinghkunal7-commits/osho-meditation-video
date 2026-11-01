@@ -1,0 +1,108 @@
+
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Meditation Studio</title>
+  <style>
+    body {
+      margin: 0;
+      background: #101510;
+      color: #f4f0df;
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+    header {
+      padding: 45px 20px;
+      background: linear-gradient(135deg, #263b2c, #76552c);
+    }
+    main {
+      max-width: 700px;
+      margin: 30px auto;
+      padding: 15px;
+    }
+    section {
+      background: #1d251e;
+      border: 1px solid #59644e;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+    h2 { color: #e9c77b; }
+    input, textarea, select {
+      box-sizing: border-box;
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 6px;
+    }
+    button {
+      background: #c79b4b;
+      border: 0;
+      padding: 13px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    audio { width: 100%; margin-top: 15px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🪷 Meditation Studio</h1>
+    <p>Create your cinematic meditation experience</p>
+  </header>
+  <main>
+    <section>
+      <h2>Upload Your Audio</h2>
+      <input type="file" id="audio" accept="audio/*">
+      <audio id="player" controls></audio>
+    </section>
+    <section>
+      <h2>Video Settings</h2>
+      <input id="title" placeholder="Enter video title">
+      <select id="style">
+        <option>Ancient India</option>
+        <option>Himalayan Sunrise</option>
+        <option>Forest Meditation</option>
+        <option>Ancient Temple</option>
+      </select>
+      <textarea id="prompts" rows="5"
+        placeholder="Paste your AI video prompts"></textarea>
+      <textarea id="subtitles" rows="5"
+        placeholder="Paste your Hindi subtitles"></textarea>
+      <button onclick="downloadProject()">Download Project</button>
+      <p id="message"></p>
+    </section>
+  </main>
+  <script>
+    document.getElementById("audio").addEventListener("change", function() {
+      if (this.files[0]) {
+        document.getElementById("player").src =
+          URL.createObjectURL(this.files[0]);
+      }
+    });
+
+    function downloadProject() {
+      const data = {
+        title: document.getElementById("title").value,
+        style: document.getElementById("style").value,
+        prompts: document.getElementById("prompts").value,
+        subtitles: document.getElementById("subtitles").value
+      };
+      const blob = new Blob(
+        [JSON.stringify(data, null, 2)],
+        { type: "application/json" }
+      );
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "meditation-project.json";
+      a.click();
+      URL.revokeObjectURL(url);
+      document.getElementById("message").textContent =
+        "Project downloaded successfully!";
+    }
+  </script>
+</body>
+</html>
